@@ -1,4 +1,5 @@
 from aiogram import Router
+
 from app import keyboards as kb
 from app import texts as tx
 from aiogram import F
@@ -15,7 +16,16 @@ first_message_ids = {}
 
 @router.message(CommandStart())
 async def cmd_start(message: Message):
-    sent_message = await message.answer(tx.start, reply_markup=kb.start)
+    # URL фотографии
+    photo_url = "https://disk.yandex.ru/i/bU2z404HlRMlew"
+
+    # Отправляем фотографию с текстом и клавиатурой
+    sent_message = await message.answer_photo(
+        photo=photo_url,  # Указываем URL фотографии
+        caption=tx.start,  # Добавляем текст к фотографии
+        reply_markup=kb.start,  # Добавляем клавиатуру
+        parse_mode="HTML"  # Указываем форматирование текста
+    )
     first_message_ids[message.chat.id] = sent_message.message_id
 
 
@@ -40,4 +50,4 @@ async def aboutchannel(callback: CallbackQuery):
     if callback.message.message_id != first_message_ids.get(callback.message.chat.id):
         await callback.message.delete()
     await callback.answer()
-    await callback.message.answer(tx.start, reply_markup=kb.start)
+    await callback.message.answer(tx.start, reply_markup=kb.start, parse_mode="HTML")
