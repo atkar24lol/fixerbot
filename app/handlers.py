@@ -6,6 +6,7 @@ from aiogram import F
 from aiogram.types import (
     Message,
     CallbackQuery,
+    FSInputFile
 )
 from aiogram.filters import CommandStart
 
@@ -18,6 +19,11 @@ first_message_ids = {}
 async def cmd_start(message: Message):
     # URL фотографии
     photo_url = "https://disk.yandex.ru/i/bU2z404HlRMlew"
+    vnote_path = "../fixer_vnote.mp4"
+
+    video_note = FSInputFile(vnote_path)
+
+    await message.answer_video_note(video_note=video_note)
 
     # Отправляем фотографию с текстом и клавиатурой
     sent_message = await message.answer_photo(
